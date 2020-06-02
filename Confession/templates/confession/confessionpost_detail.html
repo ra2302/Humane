@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h4>{{confessionpost.title}}</h4>
+        <p>{{confessionpost.content}}</p>
+        <p>{{confessionpost.get_date}}</p>
+    </div>
+    <form action="{% url 'confession:like-post' %}" method="POST">
+        {% csrf_token %}
+        {% if is_liked %}
+            <button type="submit" name="confessionpost_id" value="{{ confessionpost.id }}">Dislike</button>
+        {% else %}
+            <button type="submit" name="confessionpost_id" value="{{ confessionpost.id }}">Like</button>
+        {% endif %}
+    </form>
+    <p>{{ confessionpost.total_likes }} Like{{confessionpost.total_likes|pluralize }} </p>
+    <hr>
+    {% if request.user == confessionpost.author %}
+        <a href="{% url 'confession:post-update' confessionpost.slug %}">Edit</a>
+        <a href="{% url 'confession:post-delete' confessionpost.slug %}">Delete</a>
+    {% endif %}
+    <!-- Comments Form --> 
+    <h2>Add a new comment</h2>
+    <form action="." method="post">
+        {{ comment_form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Add comment</button>
+    </form>
+
+    {% for comment in comments %}
+        <div>
+            <p> USER: {{ comment.name }} | {{ comment.created }}</p>
+                {{ comment.body|linebreaks }}
+
+            {% for reply in comment.replies.all %}
+                <p>USER: {{ reply.name }} | {{ reply.created }}</p>
+                <li>{{ reply.body }}</li>
+            {% endfor %}
+
+            <h5>Replyy</h5>
+            <form action="." method="post">
+                {{ comment_form.as_p }}
+                {% csrf_token %}
+                <!-- Hidden input for parent comment.id -->
+                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                <input class="btn btn-primary" type="submit" value="Reply">
+            </form>
+        </div>
+    {% empty %}
+    <h4>There are no comments yet.</h4>
+    {% endfor %}
+</body>
+</html>    
