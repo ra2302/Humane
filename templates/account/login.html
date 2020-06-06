@@ -1,55 +1,72 @@
-{% extends "account/base.html" %}
-{% load i18n %}
-{% load account socialaccount %}
-{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LOG IN</title>
+   <!--============== Fontawesome ===================-->  
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+   
+   <link rel="stylesheet" href="{% static 'css/login-form.css' %}"> 
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block content %}
-  <main>
-    <div class="container">
-      <section class="mb-4">
-        <div class="row wow fadeIn">
-          <div class='col-6 offset-3'>
-          <h1>{% trans "Sign In" %}</h1>
+    
+</head>
+<body>
+ 
+<div class="limiter">
+    <div class="container-login">
+        <div class="wrap-login">
 
-          {% get_providers as socialaccount_providers %}
+            <div class="login-pic">
+                <img src="{% static 'img/undraw_Hello_qnas.svg' %}"><!--IMAGE OG THAT PEOPLE-->
+            </div>
 
-          {% if socialaccount_providers %}
-          <p>{% blocktrans with site.name as site_name %}Please sign in with one
-          of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-          for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
 
-          <div class="socialaccount_ballot">
+            <form class="login-form" method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                <span class="login-form-title"> Login </span>
+                <div class="wrap-input">
+                <div id="div_id_login" class="control-group"> 
+                    <div class="controls"> <input class="input" type="text" name="login" placeholder="Username" autofocus="autofocus" maxlength="150" class="textinput textInput" required id="id_login"> </div> 
+                    <div id="div_id_password" class="control-group"> <div class="controls"> <input class="input" type="password" name="password" placeholder="Password" class="textinput textInput" required id="id_password"> </div> </div> 
+                    <div id="div_id_remember" class="control-group"> <div class="controls"> <label for="id_remember" class="checkbox "> <input type="checkbox" name="remember" class="checkboxinput" id="id_remember">
+                    <label for="id_remember" class="checkbox ">Remember Me</label> 
+                    </div>
+                
+                <div class="wrap-input">
 
-            <ul class="socialaccount_providers">
-              {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-            </ul>
+                </div>
 
-            <div class="login-or">{% trans 'or' %}</div>
 
-          </div>
+                <div class="form-btn2">
+                    <button> Login</button>
+                    <button class="btn3"><a href="{{ signup_url }}" id="signup">SIGN UP</a></button>
+                </div>
 
-          {% include "socialaccount/snippets/login_extra.html" %}
+                <div class="border-bottom"></div>
 
-          {% else %}
-          <p>{% blocktrans %}If you have not created an account yet, then please
-          <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-          {% endif %}
 
-          <form class="login" method="POST" action="{% url 'account_login' %}">
-            {% csrf_token %}
-            {{ form|crispy }}
-            {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-            {% endif %}
-            <a class="btn btn-default" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-            <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
-          </form>
-          </div>
+                <ul class="social-icon-one">
+                    <li class="github"><a href="#"><span class="fa fa-instagram"></span></a></li>
+                    <li class="twitter"><a href="#"><span class="fa fa-twitter"></span></a></li>
+                    <li class="dribbble"><a href="#"><span class="fa fa-facebook"></span></a></li>
+                    <!--li class="behance"><a href="#"><span class="fa fa-behance"></span></a></li-->
+                </ul>
+
+
+              
+
+            </form>
+
+
         </div>
-      </section>
     </div>
-  </main>
+</div> 
 
-{% endblock %}
+
+
+</body>
+</html>

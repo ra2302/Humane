@@ -16,7 +16,7 @@ class BlogPostList(ListView):
     paginate_by = 10
 
 
-@login_required
+
 def createBlogPost(request):
 
     ImageFormSet = modelformset_factory(Images, form = ImageForm, extra=3)
